@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -37,9 +38,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.testcompose.extensions.toBrazilianCurrency
+import com.example.testcompose.model.Product
 import com.example.testcompose.ui.theme.Pink40
 import com.example.testcompose.ui.theme.Teal200
 import com.example.testcompose.ui.theme.TestComposeTheme
+import java.math.BigDecimal
 
 class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +66,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ProductItem() {
+fun ProductItem(product: Product) {
   Surface(
     shape = RoundedCornerShape(15.dp), shadowElevation = 4.dp
   ) {
@@ -84,14 +88,15 @@ fun ProductItem() {
             .offset(y = imageSize / 2)
             .clip(shape = CircleShape)
             .align(Alignment.BottomCenter),
-          painter = painterResource(id = R.drawable.ic_launcher_background),
-          contentDescription = "imagem"
+          painter = painterResource(id = product.image),
+          contentDescription = "imagem",
+          contentScale = ContentScale.Crop
         )
       }
       Spacer(modifier = Modifier.height(imageSize / 2))
       Column(Modifier.padding(16.dp)) {
         Text(
-          text = LoremIpsum(50).values.first(),
+          text = product.name,
           modifier = Modifier.padding(bottom = 8.dp),
           fontSize = 18.sp,
           fontWeight = FontWeight(700),
@@ -99,7 +104,7 @@ fun ProductItem() {
           overflow = TextOverflow.Ellipsis
         )
         Text(
-          text = "R$14,99", fontSize = 14.sp, fontWeight = FontWeight(400)
+          text = product.price.toBrazilianCurrency(), fontSize = 14.sp, fontWeight = FontWeight(400)
         )
       }
     }
@@ -127,9 +132,21 @@ fun ProductSection() {
       horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
       Spacer(Modifier)
-      ProductItem()
-      ProductItem()
-      ProductItem()
+      ProductItem(Product(
+        name = LoremIpsum(50).values.first(),
+        price = BigDecimal("11.99"),
+        image = R.drawable.ic_launcher_background
+      ))
+      ProductItem(Product(
+        name = LoremIpsum(50).values.first(),
+        price = BigDecimal("11.99"),
+        image = R.drawable.ic_launcher_background
+      ))
+      ProductItem(Product(
+        name = LoremIpsum(50).values.first(),
+        price = BigDecimal("11.99"),
+        image = R.drawable.ic_launcher_background
+      ))
       Spacer(Modifier)
     }
   }
@@ -138,7 +155,13 @@ fun ProductSection() {
 @Preview(showBackground = true)
 @Composable
 private fun ProductItemPreview() {
-  ProductItem()
+  ProductItem(
+    Product(
+      name = LoremIpsum(50).values.first(),
+      price = BigDecimal("11.99"),
+      image = R.drawable.ic_launcher_background
+    )
+  )
 }
 
 @Preview(showBackground = true)
