@@ -1,6 +1,5 @@
 package com.example.testcompose.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,8 +33,6 @@ import coil.compose.AsyncImage
 import com.example.testcompose.R
 import com.example.testcompose.extensions.toBrazilianCurrency
 import com.example.testcompose.model.Product
-import com.example.testcompose.ui.theme.Pink40
-import com.example.testcompose.ui.theme.Teal200
 import com.example.testcompose.ui.theme.TestComposeTheme
 import java.math.BigDecimal
 
