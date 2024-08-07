@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,11 +30,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.testcompose.R
 import com.example.testcompose.extensions.toBrazilianCurrency
 import com.example.testcompose.model.Product
 import com.example.testcompose.ui.theme.Pink40
 import com.example.testcompose.ui.theme.Teal200
+import com.example.testcompose.ui.theme.TestComposeTheme
 import java.math.BigDecimal
 
 @Composable
@@ -51,15 +54,23 @@ fun ProductItem(product: Product) {
         modifier = Modifier
           .height(imageSize)
           .fillMaxWidth()
-          .background(brush = Brush.horizontalGradient(colors = listOf(Pink40, Teal200)))
+          .background(
+            brush = Brush.horizontalGradient(
+              colors = listOf(
+                MaterialTheme.colorScheme.primary,
+                MaterialTheme.colorScheme.secondary
+              )
+            )
+          )
       ) {
-        Image(
+        AsyncImage(
           modifier = Modifier
             .size(imageSize)
             .offset(y = imageSize / 2)
             .clip(shape = CircleShape)
             .align(Alignment.BottomCenter),
-          painter = painterResource(id = product.image),
+          model = product.image,
+          placeholder = painterResource(id = R.drawable.ic_launcher_background),
           contentDescription = "imagem",
           contentScale = ContentScale.Crop
         )
@@ -86,11 +97,15 @@ fun ProductItem(product: Product) {
 @Preview(showBackground = true)
 @Composable
 private fun ProductItemPreview() {
-  ProductItem(
-    Product(
-      name = LoremIpsum(50).values.first(),
-      price = BigDecimal("11.99"),
-      image = R.drawable.ic_launcher_background
-    )
-  )
+  TestComposeTheme {
+    Surface {
+      ProductItem(
+        Product(
+          name = LoremIpsum(50).values.first(),
+          price = BigDecimal("11.99"),
+        )
+      )
+    }
+  }
+
 }

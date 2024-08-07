@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import com.example.testcompose.ui.components.sampleSections
 import com.example.testcompose.ui.theme.TestComposeTheme
 import com.example.testcompose.ui.views.HomeView
 
@@ -29,7 +30,7 @@ fun App() {
 //          )
 //        }
     Surface {
-      HomeView()
+      HomeView(sampleSections)
     }
   }
 }
