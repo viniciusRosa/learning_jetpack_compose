@@ -18,10 +18,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.testcompose.model.Product
 import com.example.testcompose.ui.components.CardProductItem
+import com.example.testcompose.ui.components.PartnersSection
 import com.example.testcompose.ui.components.ProductSection
 import com.example.testcompose.ui.components.SearchTextField
 import com.example.testcompose.ui.components.sampleProducts
 import com.example.testcompose.ui.components.sampleSections
+import com.example.testcompose.ui.components.sampleShopSections
 import com.example.testcompose.ui.theme.TestComposeTheme
 
 @Composable
@@ -47,6 +49,14 @@ fun HomeView(sections: Map<String, List<Product>>, searchText: String = "") {
           val products = section.value
           item {
             ProductSection(sectionName = title, products = products)
+          }
+        }
+
+        for (shop in sampleShopSections) {
+          val title = shop.key
+          val partner = shop.value
+          item {
+            PartnersSection(title = title, shop = partner)
           }
         }
       } else {
