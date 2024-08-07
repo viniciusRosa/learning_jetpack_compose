@@ -21,8 +21,12 @@ import com.example.testcompose.ui.theme.TestComposeTheme
 import java.math.BigDecimal
 
 @Composable
-fun ProductSection(sectionName: String, products: List<Product>) {
-  Column {
+fun ProductSection(
+  sectionName: String,
+  products: List<Product>,
+  modifier: Modifier = Modifier,
+) {
+  Column(modifier) {
     Text(
       text = sectionName,
       Modifier.padding(start = 16.dp, end = 16.dp),
@@ -38,7 +42,7 @@ fun ProductSection(sectionName: String, products: List<Product>) {
       horizontalArrangement = Arrangement.spacedBy(16.dp),
       contentPadding = PaddingValues(horizontal = 16.dp)
     ) {
-      items(products){ productItem ->
+      items(products) { productItem ->
         ProductItem(product = productItem)
       }
     }
@@ -78,16 +82,20 @@ val sampleDrinks = listOf(
     name = "Cerveja",
     price = BigDecimal("5.99"),
     image = "https://images.pexels.com/photos/1552630/pexels-photo-1552630.jpeg",
+    description = LoremIpsum(20).values.first()
+
   ),
   Product(
     name = "Refrigerante",
     price = BigDecimal("4.99"),
-    image = "https://images.pexels.com/photos/2775860/pexels-photo-2775860.jpeg"
+    image = "https://images.pexels.com/photos/2775860/pexels-photo-2775860.jpeg",
+    description = LoremIpsum(20).values.first()
   ),
   Product(
     name = "Suco",
     price = BigDecimal("7.99"),
-    image = "https://images.pexels.com/photos/96974/pexels-photo-96974.jpeg"
+    image = "https://images.pexels.com/photos/96974/pexels-photo-96974.jpeg",
+    description = LoremIpsum(20).values.first()
   ),
   Product(
     name = "Água",
