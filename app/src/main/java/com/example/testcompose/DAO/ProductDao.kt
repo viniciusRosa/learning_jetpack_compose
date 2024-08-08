@@ -2,7 +2,6 @@ package com.example.testcompose.DAO
 
 import androidx.compose.runtime.mutableStateListOf
 import com.example.testcompose.model.Product
-import com.example.testcompose.ui.components.sampleProducts
 
 class ProductDao {
   companion object {
