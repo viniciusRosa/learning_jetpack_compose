@@ -71,7 +71,7 @@ fun ProductFormSreen(
     verticalArrangement = Arrangement.spacedBy(16.dp)
   ) {
     Text(
-      text = "Criar Produto",
+      text = "Novo Produto",
       modifier = Modifier.fillMaxWidth(),
       fontSize = 28.sp
     )
