@@ -21,29 +21,80 @@ import com.example.testcompose.ui.components.CardProductItem
 import com.example.testcompose.ui.components.PartnersSection
 import com.example.testcompose.ui.components.ProductSection
 import com.example.testcompose.ui.components.SearchTextField
+import com.example.testcompose.ui.components.sampleCandies
+import com.example.testcompose.ui.components.sampleDrinks
 import com.example.testcompose.ui.components.sampleProducts
 import com.example.testcompose.ui.components.sampleSections
 import com.example.testcompose.ui.components.sampleShopSections
 import com.example.testcompose.ui.theme.TestComposeTheme
 
+class HomeViewUiState(
+  val sections: Map<String, List<Product>> = emptyMap(),
+  val searchedProducts: List<Product> = emptyList(),
+  val searchText: String = "",
+  val onSearchChange: (String) -> Unit = {}
+) {
+
+  fun isShowSections(): Boolean {
+    return searchText.isBlank()
+  }
+}
+
 @Composable
-fun HomeView(sections: Map<String, List<Product>>, searchText: String = "") {
+fun HomeView(products: List<Product>) {
+
+  val sections = mapOf(
+    "Novos produtos" to products,
+    "Promos" to sampleCandies + sampleDrinks,
+  )
+
+  var text by remember {
+    mutableStateOf("")
+  }
+
+  fun filterByNameAndDescription() = { product: Product ->
+    product.name.contains(text, ignoreCase = true) ||
+        product.description?.contains(text, ignoreCase = true) ?: false
+  }
+
+  val searchedProducts = remember(products, text) {
+    sampleProducts
+      .filter(filterByNameAndDescription()) + products.filter(filterByNameAndDescription())
+  }
+
+
+  val state = remember(products, text) {
+    HomeViewUiState(
+      sections = sections,
+      searchedProducts = searchedProducts,
+      searchText = text,
+      onSearchChange = { text = it }
+    )
+  }
+
+  HomeView(state)
+}
+
+@Composable
+fun HomeView(
+  state: HomeViewUiState = HomeViewUiState()
+) {
   Column {
-    var text by remember { mutableStateOf(searchText) }
-    val searchedProducts = remember(text) {
-      sampleProducts.filter { product: Product ->
-        product.name.contains(text, ignoreCase = true) ||
-            product.description?.contains(text, ignoreCase = true) ?: false
-      }
+    val sections = remember(state.sections) {
+      state.sections
     }
-    SearchTextField(searchText = text, onSearchChange = { text = it })
+    val searchedProducts = state.searchedProducts
+    SearchTextField(
+      searchText = state.searchText,
+      onSearchChange = state.onSearchChange,
+    )
     LazyColumn(
       Modifier
         .fillMaxSize(),
       verticalArrangement = Arrangement.spacedBy(16.dp),
       contentPadding = PaddingValues(bottom = 16.dp)
     ) {
-      if (text.isBlank()) {
+      if (state.isShowSections()) {
         for (section in sections) {
           val title = section.key
           val products = section.value
@@ -76,7 +127,7 @@ fun HomeView(sections: Map<String, List<Product>>, searchText: String = "") {
 private fun HomeViewPreview() {
   TestComposeTheme {
     Surface {
-      HomeView(sampleSections)
+      HomeView(HomeViewUiState(sections = sampleSections))
     }
   }
 }
@@ -86,7 +137,9 @@ private fun HomeViewPreview() {
 private fun HomeViewSearchPreview() {
   TestComposeTheme {
     Surface {
-      HomeView(sampleSections, "c")
+      HomeView(
+        state = HomeViewUiState(sections = sampleSections, searchText = "a")
+      )
     }
   }
 }
