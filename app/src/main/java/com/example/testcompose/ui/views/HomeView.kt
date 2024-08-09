@@ -9,69 +9,26 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.testcompose.model.Product
 import com.example.testcompose.ui.components.CardProductItem
 import com.example.testcompose.ui.components.PartnersSection
 import com.example.testcompose.ui.components.ProductSection
 import com.example.testcompose.ui.components.SearchTextField
-import com.example.testcompose.ui.components.sampleCandies
-import com.example.testcompose.ui.components.sampleDrinks
-import com.example.testcompose.ui.components.sampleProducts
 import com.example.testcompose.ui.components.sampleSections
 import com.example.testcompose.ui.components.sampleShopSections
+import com.example.testcompose.ui.states.HomeViewUiState
 import com.example.testcompose.ui.theme.TestComposeTheme
-
-class HomeViewUiState(
-  val sections: Map<String, List<Product>> = emptyMap(),
-  val searchedProducts: List<Product> = emptyList(),
-  val searchText: String = "",
-  val onSearchChange: (String) -> Unit = {}
-) {
-
-  fun isShowSections(): Boolean {
-    return searchText.isBlank()
-  }
-}
+import com.example.testcompose.ui.viewmodels.HomeViewViewmodel
 
 @Composable
-fun HomeView(products: List<Product>) {
+fun HomeView(
+  viewModel: HomeViewViewmodel
+) {
 
-  val sections = mapOf(
-    "Novos produtos" to products,
-    "Promos" to sampleCandies + sampleDrinks,
-  )
-
-  var text by remember {
-    mutableStateOf("")
-  }
-
-  fun filterByNameAndDescription() = { product: Product ->
-    product.name.contains(text, ignoreCase = true) ||
-        product.description?.contains(text, ignoreCase = true) ?: false
-  }
-
-  val searchedProducts = remember(products, text) {
-    sampleProducts
-      .filter(filterByNameAndDescription()) + products.filter(filterByNameAndDescription())
-  }
-
-
-  val state = remember(products, text) {
-    HomeViewUiState(
-      sections = sections,
-      searchedProducts = searchedProducts,
-      searchText = text,
-      onSearchChange = { text = it }
-    )
-  }
-
+  val state = viewModel.uiState
   HomeView(state)
 }
 
@@ -80,9 +37,7 @@ fun HomeView(
   state: HomeViewUiState = HomeViewUiState()
 ) {
   Column {
-    val sections = remember(state.sections) {
-      state.sections
-    }
+    val sections = state.sections
     val searchedProducts = state.searchedProducts
     SearchTextField(
       searchText = state.searchText,

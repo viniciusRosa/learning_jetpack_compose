@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -14,13 +15,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.testcompose.DAO.ProductDao
 import com.example.testcompose.ui.theme.TestComposeTheme
+import com.example.testcompose.ui.viewmodels.HomeViewViewmodel
 import com.example.testcompose.ui.views.HomeView
 
 class MainActivity : ComponentActivity() {
 
-  private val dao = ProductDao()
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     enableEdgeToEdge()
@@ -28,8 +28,8 @@ class MainActivity : ComponentActivity() {
       App(onFABClick = {
         startActivity(Intent(this, ProductFormActivity::class.java))
       }) {
-        val products = dao.products()
-        HomeView(products)
+        val viewModel by viewModels<HomeViewViewmodel>()
+        HomeView(viewModel)
       }
     }
   }
